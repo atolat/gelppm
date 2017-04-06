@@ -1,0 +1,39 @@
+<gel:script xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+	 xmlns:core="jelly:core"
+	 xmlns:file="jelly:com.niku.union.gel.FileTagLibrary"
+	 xmlns:gel="jelly:com.niku.union.gel.GELTagLibrary"
+	 xmlns:soap="jelly:com.niku.union.gel.SOAPTagLibrary"
+	 xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"
+	 xmlns:sql="jelly:sql"
+	 xmlns:util="jelly:util"
+	 xmlns:x="jelly:org.apache.commons.jelly.tags.xml.XMLTagLibrary"
+	 xmlns:xog="http://www.niku.com/xog"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xy="jelly:xml">
+
+	<gel:parameter default="admin" var="ClarityUser"/>
+	<gel:parameter default="clarity1" var="ClarityPassword"/>
+	<core:set value="${gel_processInstanceId}" var="myProcessId"/>
+	 <gel:setDataSource dbId="clarity"/>
+
+
+	<sql:query escapeText="0" var="oneResult">
+		<![CDATA[
+	SELECT FULL_NAME
+	FROM SRM_RESOURCES
+	WHERE UNIQUE_NAME = 'admin'
+	]]>
+		<!--<sql:param value=""/>-->
+	</sql:query>
+	<core:set value="${oneResult.rows[0].FULL_NAME}" var="firstRow"/>
+
+	<file:writeFile  embedded="false" fileName="FILE.txt">
+		<file:line>
+			<file:column value="${firstRow}"
+		</file:line>
+		<file:line>
+		Test Line 2
+		</file:line>
+	</file:writeFile>
+</gel:script>
