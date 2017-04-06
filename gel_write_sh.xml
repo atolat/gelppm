@@ -4,11 +4,22 @@
     <gel:parameter default="clarity1" var="ClarityPassword" />
     <core:set value="${gel_processInstanceId}" var="myProcessId" />
 
+    <gel:setDataSource dbId="clarity" />
+
+
+    <sql:query escapeText="0" var="oneResult">
+        <![CDATA[
+	SELECT UNIQUE_NAME
+	FROM SRM_RESOURCES
+	WHERE UNIQUE_NAME = 'admin'
+	]]>
+    </sql:query>
+    <core:set value="${oneResult.rows[0].UNIQUE_NAME}" var="firstRow" />
 
 
     <file:writeFile delimiter=" " embedded="false" fileName="C:\Users\Administrator\Desktop\initscript.sh">
         <file:line>
-            <file:column value="heroku create>C:/Users/Administrator/Desktop/appname.txt" />
+            <file:column value="heroku create 2>C:/Users/Administrator/Desktop/appname.txt"  />
         </file:line>
     </file:writeFile>
 
