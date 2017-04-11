@@ -10,15 +10,13 @@
 
     <sql:query escapeText="0" var="oneResult">
         <![CDATA[
-	SELECT UNIQUE_NAME
-	FROM SRM_RESOURCES
-	WHERE UNIQUE_NAME = 'admin'
-	]]>
+        Select lower(CODE) from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = 5104004;]]>
+        <sql:param value="${myProcessId}"/>
     </sql:query>
     <core:set value="${oneResult.rows[0].UNIQUE_NAME}" var="firstRow" />
 
 		<core:file append="true" trim="false" omitXmlDeclaration="true" name="${location}">
-		 ${firstRow},   
+		 ${firstRow},
 		</core:file>
 
 </gel:script>
