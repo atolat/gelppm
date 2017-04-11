@@ -10,7 +10,7 @@
 
     <sql:query escapeText="0" var="oneResult">
         <![CDATA[
-        Select lower(CODE) from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = 5104004;]]>
+        Select lower(CODE) from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ?;]]>
         <sql:param value="${myProcessId}"/>
     </sql:query>
     <core:set value="${oneResult.rows[0].UNIQUE_NAME}" var="firstRow" />
