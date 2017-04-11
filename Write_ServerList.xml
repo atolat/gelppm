@@ -10,13 +10,11 @@
 
     <sql:query escapeText="0" var="oneResult">
         <![CDATA[
-        Select lower(CODE) from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ?;]]>
+        Select lower(CODE) CODE from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ?;]]>
         <sql:param value="${myProcessId}"/>
     </sql:query>
-    <core:set value="${oneResult.rows[0].UNIQUE_NAME}" var="firstRow" />
+    <core:set value="${oneResult.rows[0].CODE}" var="firstRow" />
 
-		<core:file append="true" trim="false" omitXmlDeclaration="true" name="${location}">
-		 ${firstRow},
-		</core:file>
+		<core:file append="true" trim="true" omitXmlDeclaration="true" name="${location}">${firstRow},</core:file>
 
 </gel:script>
