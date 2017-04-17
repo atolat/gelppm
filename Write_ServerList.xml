@@ -2,19 +2,26 @@
 
     <gel:parameter default="admin" var="ClarityUser" />
     <gel:parameter default="clarity1" var="ClarityPassword" />
-		<gel:parameter default="/home/Clarity/Desktop/ServerList.txt" var="location" />
-    <core:set value="${gel_processInstanceId}" var="myProcessId" />
+		<gel:parameter default="/home/clarity/Desktop/ServerList.txt" var="location" />
+    <core:set value="${gel_objectInstanceId}" var="myProcessId"/>
+
 
     <gel:setDataSource dbId="clarity" />
 
 
-    <sql:query escapeText="0" var="oneResult">
+    <sql:query escapeText="0" var="AppName">
         <![CDATA[
-        Select lower(CODE) CODE from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ?;]]>
+        Select lower(CODE) CODE from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ? ]]>
         <sql:param value="${myProcessId}"/>
     </sql:query>
-    <core:set value="${oneResult.rows[0].CODE}" var="firstRow" />
+    <core:set value="${AppName.rows[0].CODE}" var="name" />
+    <sql:query escapeText="0" var="AppRegion">
+        <![CDATA[
+        Select LN_REGION REGION from ODF_CA_IDEA where ID = ? ]]>
+        <sql:param value="${myProcessId}"/>
+    </sql:query>
+    <core:set value="${AppRegion.rows[0].REGION}" var="region" />
 
-		<core:file append="true" trim="true" omitXmlDeclaration="true" name="${location}">${firstRow},</core:file>
+		<core:file append="true" trim="true" omitXmlDeclaration="true" name="${location}">${name}|${region},</core:file>
 
 </gel:script>
