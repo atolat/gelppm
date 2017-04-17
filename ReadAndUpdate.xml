@@ -1,0 +1,51 @@
+<gel:script xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+	 xmlns:core="jelly:core"
+	 xmlns:file="jelly:com.niku.union.gel.FileTagLibrary"
+	 xmlns:gel="jelly:com.niku.union.gel.GELTagLibrary"
+	 xmlns:soap="jelly:com.niku.union.gel.SOAPTagLibrary"
+	 xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"
+	 xmlns:sql="jelly:sql"
+	 xmlns:util="jelly:util"
+	 xmlns:x="jelly:org.apache.commons.jelly.tags.xml.XMLTagLibrary"
+	 xmlns:xog="http://www.niku.com/xog"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xy="jelly:xml">
+
+
+   	<gel:parameter default="admin" var="ClarityUser"/>
+   	<gel:parameter default="clarity1" var="ClarityPassword"/>
+   	 <gel:setDataSource dbId="clarity"/>
+
+     <gel:parameter var="vFileLocation" default="/home/clarity/Desktop"/>
+		 <core:set value="${gel_objectInstanceId}" var="myProcessId"/>
+
+		 <sql:query escapeText="0" var="AppName">
+				 <![CDATA[
+				 Select lower(CODE) CODE from INV_investments where ODF_OBJECT_CODE = 'idea'  and ID = ? ]]>
+				 <sql:param value="${myProcessId}"/>
+		 </sql:query>
+		 <core:set value="${AppName.rows[0].CODE}" var="name" />
+
+
+			<file:readFile fileName="${vFileLocation}/${name}.csv" delimiter="," var="vResourceData" embedded="false"/>
+      <core:forEach items="${vResourceData.rows}" var="row" indexVar="i" begin="1" step="1" />
+					
+					<sql:update>
+            <![CDATA[Update ODF_CA_IDEA set
+						LN_PROV_CPLT = 1,
+						LN_ADDONS = '${row[3]}',
+      			LN_AUTO_CERT = 0,
+      			LN_DYNOS = '${row[21]}',
+      			LN_GIT_URL = '${row[9]}',
+      			LN_OWNER = '${row[17]}',
+      			LN_PIPELINE = '${row[24]}',
+      			LN_REPO = '${row[13]}',
+      			LN_SLUG = '${row[15]}',
+      			LN_STACK = '${row[23]}',
+      			LN_WEB_URL = '${row[11]}'
+						where ID = ? ]]>
+            <sql:param value="${myProcessId}" />
+          </sql:update>
+
+</gel:script>
